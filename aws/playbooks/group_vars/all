@@ -1,0 +1,8 @@
+aws_access_key: <key-here> 
+aws_secret_key: <secret-key-here>
+key_name: <key>
+aws_region: <region>
+vpc_id: <vpc>
+vpc_subnet_id: <subnet>
+ami_id: <image>
+instance_type: <flavor>
