@@ -26,14 +26,14 @@
 
   - name: Create Master/Node EC2 instances
     ec2:
-      aws_access_key: "{{aws_access_key}}"
-      aws_secret_key: "{{aws_secret_key}}"
-      key_name: "{{key_name}}"
-      region: "{{aws_region}}"
-      group_id: "{{firewall.group_id}}"
-      instance_type: "{{instance_type}}"
-      image: "{{ami_id}}"
-      vpc_subnet_id: "{{vpc_subnet_id}}"
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      key_name: "{{ key_name }}"
+      region: "{{ aws_region }}"
+      group_id: "{{ firewall.group_id }}"
+      instance_type: "{{ instance_type }}"
+      image: "{{ ami_id }}"
+      vpc_subnet_id: "{{ vpc_subnet_id }}"
       assign_public_ip: yes
       user_data: "{{ lookup('file', 'cloud-init/init.sh') }}"
       wait: yes
@@ -42,11 +42,11 @@
           volume_type: gp2
           volume_size: 200
           delete_on_termination: true
-      exact_count: 2
+      exact_count: "{{ count }}"
       count_tag:
-         Name: openshift-contrail
+         Name: "{{ ec2_tag }}"
       instance_tags:
-         Name: openshift-contrail
+         Name: "{{ ec2_tag }}"
     register: ec2
 
   - name: Wait for SSH to come up
