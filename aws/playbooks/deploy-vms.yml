@@ -2,7 +2,8 @@
 - name: Create AWS resources
   hosts: localhost
   connection: local
-  gather_facts: False
+  gather_facts: False 
+  become: False
 
   tasks:
 
@@ -57,3 +58,12 @@
       timeout: 320
       state: started
     with_items: "{{ ec2.instances }}"
+
+  - name: Gather EC2 facts
+    ec2_remote_facts:
+      region: "{{ aws_region }}"
+    register: ec2_facts
+
+  - name: Debug
+    debug:
+      msg: "{{ ec2_facts }}"
