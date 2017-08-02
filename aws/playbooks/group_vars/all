@@ -6,3 +6,5 @@ vpc_id: <vpc>
 vpc_subnet_id: <subnet>
 ami_id: <image>
 instance_type: <flavor>
+count: 2
+ec2_tag: contrail-openshift
