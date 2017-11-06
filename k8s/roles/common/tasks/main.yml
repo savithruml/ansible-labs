@@ -1,0 +1,38 @@
+---
+# This playbook deploys the Kubernetes cluster with Contrail CNI
+
+# Author: SAVITHRU LOKANATH
+# Contact: SAVITHRU AT ICLOUD DOT COM
+
+- name: Install ntp
+  apt: name=ntp state=present
+  tags: ntp
+
+- name: Install ntpdate
+  apt: name=ntpdate state=present
+  tags: ntp
+
+- name: Stop ntp service
+  service: name=ntp state=stopped enabled=yes
+  tags: ntp
+
+- name: Sync ntp service
+  shell: ntpdate -s time.nist.gov
+  tags: ntp
+
+- name: Start the ntp service
+  service: name=ntp state=started enabled=yes
+  tags: ntp
+
+- name: Update packages 
+  apt:
+    update_cache: yes
+
+- name: Install docker
+  service: name=docker state=started enabled=yes
+  tags: docker
+
+- name: Install dependencies
+  apt:
+    name: apt-transport-https
+    state: present
