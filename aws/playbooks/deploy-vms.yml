@@ -9,8 +9,8 @@
 
   - name: Create a security group
     ec2_group:
-      name: openshift-contrail
-      description: "OpenShift-Contrail Security Group"
+      name: contrail
+      description: "Contrail Security Group"
       region: "{{ aws_region }}"
       vpc_id: "{{ vpc_id }}"
       aws_access_key: "{{ aws_access_key }}"
