@@ -4,13 +4,21 @@
 # Author: SAVITHRU LOKANATH
 # Contact: SAVITHRU AT ICLOUD DOT COM
 
-- name: Install ntp
-  apt: name=ntp state=present
-  tags: ntp
+- name: Update packages
+  apt: update_cache=yes
 
-- name: Install ntpdate
-  apt: name=ntpdate state=present
-  tags: ntp
+- name: Install base packages
+  apt: name={{item}} state=present
+  with_items:
+    - ntp
+    - ntpdate
+    - bridge-utils
+    - cgroupfs-mount
+    - containerd
+    - runc
+    - ubuntu-fan
+    - apt-transport-https
+    - docker.io
 
 - name: Stop ntp service
   service: name=ntp state=stopped enabled=yes
@@ -23,16 +31,3 @@
 - name: Start the ntp service
   service: name=ntp state=started enabled=yes
   tags: ntp
-
-- name: Update packages 
-  apt:
-    update_cache: yes
-
-- name: Install docker
-  service: name=docker state=started enabled=yes
-  tags: docker
-
-- name: Install dependencies
-  apt:
-    name: apt-transport-https
-    state: present
