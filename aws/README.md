@@ -7,7 +7,7 @@
             (ansible-node)# pip install -U boto3
       
             (ansible-node)# cd /root
-            (ansible-node)# git clone https://github.com/savithuml/ansible-labs
+            (ansible-node)# git clone https://github.com/savithruml/ansible-labs
             
     * Populate /root/ansible-labs/aws/playbooks/group_vars/all file with AWS creds & cluster info
       
