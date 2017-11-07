@@ -4,7 +4,22 @@
 # Author: SAVITHRU LOKANATH
 # Contact: SAVITHRU AT ICLOUD DOT COM
 
-- set_fact: kubeadm_token={{ hostvars[groups['masters'][0]]['token'] }}
+- name: Register nodes to master
+  shell: kubeadm join {{ groups['masters'][0] }}:6443 --token {{ hostvars[groups['masters'][0]]['token'] }}
+  tags: node
 
-- name: Join cluster
-  command: /usr/bin/kubeadm join {{ groups['masters'][0] }}:6443 --token {{ kubeadm_token }}
+- name: Launch Contrail Networking
+  shell: kubectl apply -f /tmp/contrail-installer.yml
+  delegate_to: {{ groups['masters'][0] }}
+  tags: node
+
+- name: Launch kubernetes dashboard
+  shell: kubectl create -f /tmp/k8s-dashboard.yml
+  delegate_to: {{ groups['masters'][0] }}
+  tags: node
+
+- name: Info
+  debug:
+    msg: 
+      - "Contrail UI @ https://{{ groups['masters'][0] }}:8413"
+      - "Kubernetes UI @ http://{{ groups['nodes'][0] }}:9090"
