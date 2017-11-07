@@ -1,0 +1,10 @@
+---
+# This playbook deploys the Kubernetes cluster with Contrail CNI
+
+# Author: SAVITHRU LOKANATH
+# Contact: SAVITHRU AT ICLOUD DOT COM
+
+- set_fact: kubeadm_token={{ hostvars[groups['masters'][0]]['token'] }}
+
+- name: Join cluster
+  command: /usr/bin/kubeadm join {{ groups['masters'][0] }}:6443 --token {{ kubeadm_token }}

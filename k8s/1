@@ -24,11 +24,11 @@
   failed_when: "'FAILED' in init.stderr"
   tags: master
 
-#- name: Create kubernetes directory
-#  file: 
-#    path: "{{ lookup('env', 'HOME')}}/.kube"
-#    state: directory
-#  tags: master
+- name: Create kubernetes conf local directory
+  file: 
+    path: "{{ lookup('env', 'HOME')}}/.kube"
+    state: directory
+  tags: master
 
 - name: Copy kube-config to local path
   copy:

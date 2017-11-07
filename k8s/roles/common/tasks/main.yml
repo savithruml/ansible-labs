@@ -23,7 +23,10 @@
   tags: common
 
 - name: Stop ntp service
-  service: name=ntp state=stopped enabled=yes
+  service:
+    name: ntp
+    state: stopped
+    enabled: yes
   tags: common
 
 - name: Sync ntp service
@@ -31,7 +34,10 @@
   tags: common
 
 - name: Start the ntp service
-  service: name=ntp state=started enabled=yes
+  service:
+    name: ntp
+    state: started
+    enabled: yes
   tags: common
 
 - name: Add apt signing key
