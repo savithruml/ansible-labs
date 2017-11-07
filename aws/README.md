@@ -1,4 +1,4 @@
-### LAUNCH INSTANCES ON AWS (Automated)
+### LAUNCH INSTANCES (Automated)
 
     * Bring your ansible node. This node can either sit indide the AWS environment or outside
     
