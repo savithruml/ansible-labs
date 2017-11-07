@@ -31,12 +31,32 @@
     return_content: yes
   register: hostname_node
 
-- name: Info
+- name: Wait for Contrail dashboard service to come up
+  uri:
+    url: https://{{ hostname_master.content }}:8143
+    validate_certs: False
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 300
+  delay: 2
+
+- name: Wait for kubernetes dashboard pod to come up
+  uri:
+    url: http://{{ hostname_node.content }}:9090
+    validate_certs: False
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 50
+  delay: 2
+
+- name: Cluster info
   debug:
     msg: 
-      - "Contrail Web-UI @ https://{{ hostname_master.content }}:8143"
-      - "Kubernetes UI @ http://{{ hostname_node.content }}:9090"
+      - "Contrail dashboard @ https://{{ hostname_master.content }}:8143"
+      - "Kubernetes dashboard @ http://{{ hostname_node.content }}:9090"
       - "Login user: admin"
       - "Login password: contrail123"
-      - "AUTHOR: Savithru M Lokanath"
-      - "CONTACT: savithru@icloud.com"
+      - "Built & Maintained by: Savithru M Lokanath"
+      - "Contact: savithru@icloud.com"
