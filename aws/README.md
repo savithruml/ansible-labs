@@ -4,7 +4,7 @@
     
             (ansible-node)# apt-get update -y && apt-get install python python-pip -y
             (ansible-node)# pip install ansible
-            (ansible-node)# pip install -U boto
+            (ansible-node)# pip install -U boto boto3
       
             (ansible-node)# cd /root
             (ansible-node)# git clone https://github.com/savithruml/ansible-labs
