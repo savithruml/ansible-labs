@@ -10,16 +10,33 @@
 
 - name: Launch Contrail Networking
   shell: kubectl apply -f /tmp/contrail-installer.yml
-  delegate_to: {{ groups['masters'][0] }}
+  delegate_to: "{{ groups['masters'][0] }}"
   tags: node
 
 - name: Launch kubernetes dashboard
   shell: kubectl create -f /tmp/k8s-dashboard.yml
-  delegate_to: {{ groups['masters'][0] }}
+  delegate_to: "{{ groups['masters'][0] }}"
   tags: node
+
+- name: Get master hostname
+  uri:
+    url: http://169.254.169.254/latest/meta-data/public-hostname
+    return_content: yes
+  register: hostname_master 
+  delegate_to: "{{ groups['masters'][0] }}"
+
+- name: Get node hostname
+  uri:
+    url: http://169.254.169.254/latest/meta-data/public-hostname
+    return_content: yes
+  register: hostname_node
 
 - name: Info
   debug:
     msg: 
-      - "Contrail UI @ https://{{ groups['masters'][0] }}:8413"
-      - "Kubernetes UI @ http://{{ groups['nodes'][0] }}:9090"
+      - "Contrail Web-UI @ https://{{ hostname_master.content }}:8143"
+      - "Kubernetes UI @ http://{{ hostname_node.content }}:9090"
+      - "Login user: admin"
+      - "Login password: contrail123"
+      - "AUTHOR: Savithru M Lokanath"
+      - "CONTACT: savithru@icloud.com"
