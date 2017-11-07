@@ -4,9 +4,9 @@
     
             (ansible-node)# apt-get update -y && apt-get install python python-pip -y
             (ansible-node)# pip install ansible
+            (ansible-node)# pip install -U boto3
       
             (ansible-node)# cd /root
-            (ansible-node)# git clone https://github.com/savithuml/opencontrail
             (ansible-node)# git clone https://github.com/savithuml/ansible-labs
             
     * Populate /root/ansible-labs/aws/playbooks/group_vars/all file with AWS creds & cluster info
@@ -26,29 +26,5 @@
                  
             (ansible-node)# cd /root/ansible-labs/aws       
             (ansible-node)# ansible-playbook -i inventory/hosts playbooks/deploy-vms.yml
-      
-     * Populate /root/opencontrail/kubernetes/hosts with k8s-master & k8s-node info
-    
-            (ansible-node)# cat /root/opencontrail/kubernetes/hosts
-       
-                  [masters]
-                  10.10.10.1
-
-                  [nodes]
-                  10.10.10.2
-        
- ### RUN THE PLAY
- 
-            (ansible-node)# cd /root/opencontrail/kubernetes
-            (ansible-node)# ansible-playbook -i hosts site.yml
             
-            
- ### VERIFY
-            
-            (k8s-master)# kubectl get pods -n kube-system -o wide | grep contrail
-               
-               contrail-agent-nmtvz                      1/1       Running             0          14m       172.31.0.65    ip-172-31-0-65
-               contrail-analytics-44gpk                  1/1       Running             0          15m       172.31.14.25   ip-172-31-14-25
-               contrail-analyticsdb-brrk6                1/1       Running             0          15m       172.31.14.25   ip-172-31-14-25
-               contrail-controller-x6nxv                 1/1       Running             0          15m       172.31.14.25   ip-172-31-14-25
-               contrail-kube-manager-xxv2h               1/1       Running             0          15m       172.31.14.25   ip-172-31-14-25
+    * This should bring up 2 instances in AWS with root password set to "c0ntrail123"
