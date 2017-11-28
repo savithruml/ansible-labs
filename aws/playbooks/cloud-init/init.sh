@@ -7,3 +7,6 @@ service sshd restart
 
 # Set root password
 echo "root:c0ntrail123" | chpasswd
+
+# Install dependencies
+apt-get update -y && apt-get install python -y
