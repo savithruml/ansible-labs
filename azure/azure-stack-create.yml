@@ -25,32 +25,38 @@
       virtual_network: "{{ virtual_network_name }}"
       resource_group: "{{ resource_group_name }}"
 
+  - name: Create a network security group
+    azure_rm_securitygroup:
+      name: "{{ network_security_group_name }}"
+      resource_group: "{{ network_security_group_name }}"
+
+  - name: Create a rule that allows all traffic
+    command: /usr/bin/az network nsg rule create --resource-group "{{ resource_group_name }}" --nsg-name "{{ network_security_group_name }}" --name allow-all --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+
+  - group:
   - name: Create public IP address's for OpenShift instances
     azure_rm_publicipaddress:
-      name: masterPublicIP
+      name: "masterPublicIP-{{ item }}"
       allocation_method: Static
       resource_group: "{{ resource_group_name }}"
 
-  - name: Create a Network Security Group that allows all traffic
-    command: /usr/bin/az network nsg rule create --resource-group "{{ resource_group_name }}" --nsg-name "{{ network_security_group_name }}" --name allow-all --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
-
   - name: Create a vNIC for OpenShift master instance
     azure_rm_networkinterface:
-      name: masterNIC
+      name: "masterNIC-{{ item }}"
       virtual_network: "{{ virtual_network_subnet_prefix }}"
       subnet: subnet-1
-      public_ip_name: masterPublicIP
+      public_ip_name: "masterPublicIP-{{ item }}"
       security_group: "{{ network_security_group_name }}"
       resource_group: "{{ resource_group_name }}"
 
   - name: Create OpenShift master instance
     azure_rm_virtualmachine:
-      name: "{{ master_instance_name }}"
+      name: "{{ master_instance_name }}-{{ item }}"
       vm_size: "{{ flavor }}"
       admin_username: "{{ admin_username }}"
       admin_password: "{{ admin_password }}"
       ssh_password_enabled: true
-      network_interfaces: masterNIC
+      network_interfaces: "masterNIC-{{ item }}"
       storage_account: "{{ storage_account_name }}" 
       storage_container: master
       storage_blob: master.vhd
@@ -60,3 +66,5 @@
         sku: '7.3'
         version: latest
       resource_group: "{{ resource_group_name }}"
+ 
+    with_sequence: count=3

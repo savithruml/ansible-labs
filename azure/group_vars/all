@@ -12,3 +12,4 @@ master_instance_name: "openshift-master"
 flavor: "Standard_DS1_v2"
 admin_username: "contrail"
 admin_password: "C0ntrail12345"
+master_count: 3
