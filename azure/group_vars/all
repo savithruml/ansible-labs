@@ -1,4 +1,3 @@
----
 resource_group_name: "myLab"
 azure_region: "eastus"
 storage_account_name: "mylabstorage"

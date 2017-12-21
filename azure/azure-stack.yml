@@ -1,3 +1,4 @@
+---
 - name: Create azure resources for OpenShift-Contrail stack
   hosts: localhost
   connection: local
