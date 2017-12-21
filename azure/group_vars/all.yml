@@ -1,0 +1,4 @@
+---
+resource_group: myLab
+playbook_debug: yes
+location: eastus

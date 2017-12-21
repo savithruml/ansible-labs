@@ -1,0 +1,61 @@
+- name: Create azure resources for OpenShift-Contrail stack
+  hosts: localhost
+  connection: local
+  tasks:
+
+  - name: Create resource group
+    azure_rm_resourcegroup:
+      name: myResourceGroup
+      location: eastus
+
+  - name: Create storage account
+    command: /usr/bin/az storage account create --name contrailosstore --resource-group myResourceGroup --kind Storage --location eastus --sku Standard_LRS 
+
+  - name: Create a virtual network
+    azure_rm_virtualnetwork:
+      name: openshift-contrail-vn
+      address_prefixes: "10.0.0.0/16"
+      resource_group: myResourceGroup
+
+  - name: Add subnet to virtual network
+    azure_rm_subnet:
+      name: host-subnet
+      address_prefix: "10.0.1.0/24"
+      virtual_network: openshift-contrail-vn
+      resource_group: myResourceGroup
+
+  - name: Create public IP address for OpenShift master instance
+    azure_rm_publicipaddress:
+      name: masterPublicIP
+      allocation_method: Static
+      resource_group: myResourceGroup
+
+  - name: Create a Network Security Group that allows all traffic
+    command: /usr/bin/az network nsg rule create --resource-group myResourceGroup --nsg-name openshift-contrail-sg --name allow-all --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+
+  - name: Create a vNIC for OpenShift master instance
+    azure_rm_networkinterface:
+      resource_group: myResourceGroup
+      name: masterNIC
+      virtual_network: openshift-contrail-vn
+      subnet: host-subnet
+      public_ip_name: masterPublicIP
+      security_group: openshift-contrail-sg
+
+  - name: Create OpenShift master instance
+    azure_rm_virtualmachine:
+      resource_group: myResourceGroup
+      name: openshift-master
+      vm_size: Standard_DS1_v2
+      admin_username: contrail
+      admin_password: C0ntrail12345
+      ssh_password_enabled: true
+      network_interfaces: masterNIC
+      storage_account: contrailosstore
+      storage_container: master
+      storage_blob: master.vhd
+      image:
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.3'
+        version: latest
