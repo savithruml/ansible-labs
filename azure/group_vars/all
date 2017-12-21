@@ -1,6 +1,6 @@
-resource_group_name: "myLab"
-azure_region: "eastus"
-storage_account_name: "mycontrailstorage"
+resource_group_name: "mykollaLab"
+azure_region: "westus"
+storage_account_name: "mykollastorage"
 storage_account_sku: "Standard_LRS"
 
 virtual_network_name: "openshift-contrail-vn"
