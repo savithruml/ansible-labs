@@ -25,7 +25,7 @@
       virtual_network: "{{ virtual_network_name }}"
       resource_group: "{{ resource_group_name }}"
 
-  - name: Create public IP address for OpenShift master instance
+  - name: Create public IP address's for OpenShift instances
     azure_rm_publicipaddress:
       name: masterPublicIP
       allocation_method: Static
