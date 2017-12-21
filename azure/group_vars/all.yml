@@ -1,4 +1,15 @@
 ---
-resource_group: myLab
-playbook_debug: yes
-location: eastus
+resource_group_name: "myLab"
+azure_region: "eastus"
+storage_account_name: "mylabstorage"
+storage_account_sku: "Standard_LRS"
+
+virtual_network_name: "openshift-contrail-vn"
+virtual_network_prefix: "10.0.0.0/16"
+virtual_network_subnet_prefix: "10.0.1.0/24"
+network_security_group_name: "openshift-contrail-sg"
+
+master_instance_name: "openshift-master"
+flavor: "Standard_DS1_v2"
+admin_username: "contrail"
+admin_password: "C0ntrail12345"
