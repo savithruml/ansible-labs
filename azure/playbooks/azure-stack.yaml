@@ -5,53 +5,52 @@
 
   - name: Create resource group
     azure_rm_resourcegroup:
-      name: myResourceGroup
-      location: eastus
+      name: "{{ resource_group_name }}"
+      location: "{{ azure_region }}"
 
   - name: Create storage account
-    command: /usr/bin/az storage account create --name contrailosstore --resource-group myResourceGroup --kind Storage --location eastus --sku Standard_LRS 
+    command: /usr/bin/az storage account create --name "{{ storage_account_name }}" --resource-group "{{ resource_group_name }}" --kind Storage --location "{{ azure_region }}" --sku "{{ storage_account_sku }}"
 
   - name: Create a virtual network
     azure_rm_virtualnetwork:
-      name: openshift-contrail-vn
-      address_prefixes: "10.0.0.0/16"
-      resource_group: myResourceGroup
+      name: "{{ virtual_network_name }}"
+      address_prefixes: "{{ virtual_network_prefix }}"
+      resource_group: "{{ resource_group_name }}"
 
   - name: Add subnet to virtual network
     azure_rm_subnet:
-      name: host-subnet
-      address_prefix: "10.0.1.0/24"
-      virtual_network: openshift-contrail-vn
-      resource_group: myResourceGroup
+      name: subnet-1
+      address_prefix: "{{ virtual_network_subnet_prefix }}"
+      virtual_network: "{{ virtual_network_name }}"
+      resource_group: "{{ resource_group_name }}"
 
   - name: Create public IP address for OpenShift master instance
     azure_rm_publicipaddress:
       name: masterPublicIP
       allocation_method: Static
-      resource_group: myResourceGroup
+      resource_group: "{{ resource_group_name }}"
 
   - name: Create a Network Security Group that allows all traffic
-    command: /usr/bin/az network nsg rule create --resource-group myResourceGroup --nsg-name openshift-contrail-sg --name allow-all --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+    command: /usr/bin/az network nsg rule create --resource-group "{{ resource_group_name }}" --nsg-name "{{ network_security_group_name }}" --name allow-all --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 
   - name: Create a vNIC for OpenShift master instance
     azure_rm_networkinterface:
-      resource_group: myResourceGroup
       name: masterNIC
-      virtual_network: openshift-contrail-vn
-      subnet: host-subnet
+      virtual_network: "{{ virtual_network_subnet_prefix }}"
+      subnet: subnet-1
       public_ip_name: masterPublicIP
-      security_group: openshift-contrail-sg
+      security_group: "{{ network_security_group_name }}"
+      resource_group: "{{ resource_group_name }}"
 
   - name: Create OpenShift master instance
     azure_rm_virtualmachine:
-      resource_group: myResourceGroup
-      name: openshift-master
-      vm_size: Standard_DS1_v2
-      admin_username: contrail
-      admin_password: C0ntrail12345
+      name: "{{ master_instance_name }}"
+      vm_size: "{{ flavor }}"
+      admin_username: "{{ admin_username }}"
+      admin_password: "{{ admin_password }}"
       ssh_password_enabled: true
       network_interfaces: masterNIC
-      storage_account: contrailosstore
+      storage_account: "{{ storage_account_name }}" 
       storage_container: master
       storage_blob: master.vhd
       image:
@@ -59,3 +58,4 @@
         publisher: OpenLogic
         sku: '7.3'
         version: latest
+      resource_group: "{{ resource_group_name }}"
