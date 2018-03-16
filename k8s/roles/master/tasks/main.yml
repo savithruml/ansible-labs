@@ -10,7 +10,7 @@
   tags: master
 
 - name: Generate kubeadm token
-  when: reset | succeeded
+  when: reset | success
   shell: kubeadm token generate
   register: kubeadm_token
   tags: master
