@@ -47,8 +47,8 @@
     validate_certs: False
     status_code: 200
   register: result
-  until: result.status == 200
-  retries: 50
+  until: result.status == "200"
+  retries: 100
   delay: 2
 
 - name: Cluster info
