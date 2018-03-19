@@ -37,7 +37,7 @@
     validate_certs: False
     status_code: 200
   register: result
-  until: result.status == 200
+  until: ('status' in result) and (result.status == 200)
   retries: 300
   delay: 2
 
@@ -47,7 +47,7 @@
     validate_certs: False
     status_code: 200
   register: result
-  until: result.status == "200"
+  until: ('status' in result) and (result.status == 200)
   retries: 100
   delay: 2
 
