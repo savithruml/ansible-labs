@@ -20,6 +20,11 @@
     - ubuntu-fan
     - apt-transport-https
     - docker.io
+    - python-pip
+  tags: common
+
+- name: Install httplib
+  command: pip install httplib2
   tags: common
 
 - name: Stop ntp service
