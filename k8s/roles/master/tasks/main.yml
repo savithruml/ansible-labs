@@ -42,7 +42,8 @@
   tags: master
   
 - name: Set kubeconfig environment
-  environment: 
+  shell: "echo $KUBECONFIG"
+  environment:
     KUBECONFIG: "{{ lookup('env', 'HOME')}}/.kube/config"
   tags: master
 
