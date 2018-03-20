@@ -27,14 +27,14 @@
 
 - name: Create kubernetes config directory
   file:
-    path: "{{ lookup('env', 'HOME')}}/.kube/"
+    path: "/root/.kube/"
     state: directory
   tags: master
 
 - name: Copy kubernetes config file
   copy:
     src: /etc/kubernetes/admin.conf
-    dest: "{{ lookup('env', 'HOME')}}/.kube/config"
+    dest: "/root/.kube/config"
     owner: root
     group: root
     mode: 0755
@@ -44,7 +44,7 @@
 - name: Set kubeconfig environment
   shell: "echo $KUBECONFIG"
   environment:
-    KUBECONFIG: "{{ lookup('env', 'HOME')}}/.kube/config"
+    KUBECONFIG: "/root/.kube/config"
   tags: master
 
 - name: Generate Contrail single YAML file
