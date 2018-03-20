@@ -40,6 +40,11 @@
     mode: 0755
     remote_src: True
   tags: master
+  
+- name: Set kubeconfig environment
+  environment: 
+    KUBECONFIG: "{{ lookup('env', 'HOME')}}/.kube/config"
+  tags: master
 
 - name: Generate Contrail single YAML file
   template:
