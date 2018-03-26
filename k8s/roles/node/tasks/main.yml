@@ -4,6 +4,10 @@
 # Author: SAVITHRU LOKANATH
 # Contact: SAVITHRU AT ICLOUD DOT COM
 
+- name: Reset kubernetes if installed
+  shell: kubeadm reset
+  tags: node
+
 - name: Register nodes to master
   shell: kubeadm join {{ groups['masters'][0] }}:6443 --token {{ hostvars[groups['masters'][0]]['token'] }} --discovery-token-unsafe-skip-ca-verification
   tags: node
